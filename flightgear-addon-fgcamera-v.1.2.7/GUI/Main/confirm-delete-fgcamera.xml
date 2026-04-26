@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<PropertyList>
+    <name>confirm-delete-fgcamera</name>
+    <modal>true</modal>
+    <layout>vbox</layout>
+    <default-padding>10</default-padding>
+
+    <text>
+        <label>Are you sure you want to delete the current camera?</label>
+    </text>
+
+    <group>
+        <layout>hbox</layout>
+        <halign>fill</halign>
+
+        <empty><stretch>true</stretch></empty>
+
+        <button>
+            <legend>Delete</legend>
+            <default>true</default>
+            <equal>true</equal>
+            <binding>
+                <command>nasal</command>
+                <script>deleteCamera()</script>
+            </binding>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
+
+        <empty><stretch>true</stretch></empty>
+
+        <button>
+            <legend>Cancel</legend>
+            <equal>true</equal>
+            <key>Esc</key>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
+
+        <empty><stretch>true</stretch></empty>
+    </group>
+
+    <nasal>
+        <open><![CDATA[
+            #==================================================
+            #   Delete camera
+            #==================================================
+            var deleteCamera = func {
+                var n = fgcamera.cameras.size();
+                if (n == 1) {
+                    gui.popupTip("The last camera cannot be deleted");
+                    return;
+                }
+
+                var id = fgcamera.cameras.getCurrentId();
+                var newId = id;
+                if (newId == (n - 1)) {
+                    newId -= 1;
+                }
+                fgcamera.cameras.getVector()[id] = nil;
+                fgcamera.cameras.replace(compressVector(fgcamera.cameras.getVector()));
+                fgcamera.cameras.setCurrentId(newId);
+
+                fgcommand("fgcamera-select", props.Node.new({ "camera-id": newId }));
+            }
+
+            #==================================================
+            #   Functions
+            #==================================================
+            var compressVector = func (vector) {
+                var newVector = [];
+                if (size(vector)) {
+                    forindex (var i; vector) {
+                        if (vector[i] != nil) {
+                            append(newVector, vector[i]);
+                        }
+                    }
+                }
+                return newVector;
+            }
+        ]]></open>
+    </nasal>
+</PropertyList>

@@ -1,0 +1,778 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+    <name>DHM-settings</name>
+    <layout>vbox</layout>
+    <width>430</width>
+    <x>20</x>
+    <y>-50</y>
+
+    <group>
+        <layout>hbox</layout>
+
+        <empty><stretch>1</stretch></empty>
+
+        <text>
+            <label>Dynamic Head Movement</label>
+        </text>
+
+        <empty><stretch>1</stretch></empty>
+
+        <button>
+            <legend>X</legend>
+            <key>Esc</key>
+            <pref-width>20</pref-width>
+            <pref-height>20</pref-height>
+            <binding>
+                <command>dialog-show</command>
+                <dialog-name>current-camera-config</dialog-name>
+            </binding>
+            <binding>
+                <command>dialog-close</command>
+                <dialog-name>DHM-settings</dialog-name>
+            </binding>
+        </button>
+    </group>
+
+    <hrule/>
+
+    <group>
+        <layout>vbox</layout>
+        <padding>6</padding>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Head mass</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/head-mass</property>
+                <fraction>0.3</fraction>
+                <step>1</step>
+                <min>1</min>
+                <max>30</max>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script><![CDATA[
+                        fgcamera.cameras.getCurrent().DHM["head-mass"] = getprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/head-mass") or 10;
+                        fgcamera.DHMHandler.updateValues();
+                    ]]></script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/head-mass</property>
+            </text>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>G-load release</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/g-load-release</property>
+                <fraction>0.3</fraction>
+                <step>0.01</step>
+                <min>0</min>
+                <max>0.3</max>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setFilter()</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/g-load-release</property>
+            </text>
+        </group>
+    </group>
+
+    <group>
+        <layout>vbox</layout>
+        <padding>6</padding>
+
+        <group>
+            <layout>hbox</layout>
+            <hrule><stretch>true</stretch></hrule>
+            <text>
+                <label>X axis</label>
+            </text>
+            <hrule><stretch>true</stretch></hrule>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Constant G-load</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <x>10</x>
+                <y>50</y>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/x-axis/constant-g</property>
+                <min>0</min>
+                <max>2</max>
+                <fraction>0.1</fraction>
+                <step>0.01</step>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setData("x-axis", "constant-g")</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/x-axis/constant-g</property>
+            </text>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Impulse G-load</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/x-axis/impulse-g</property>
+                <fraction>0.1</fraction>
+                <step>0.01</step>
+                <min>0</min>
+                <max>2</max>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setData("x-axis", "impulse-g")</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/x-axis/impulse-g</property>
+            </text>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Head bank</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/x-axis/head-bank</property>
+                <min>0</min>
+                <max>300</max>
+                <fraction>0.1</fraction>
+                <step>1</step>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setData("x-axis", "head-bank")</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/x-axis/head-bank</property>
+            </text>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Damping</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <x>10</x>
+                <y>50</y>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/x-axis/damping</property>
+                <fraction>0.1</fraction>
+                <step>1</step>
+                <min>0</min>
+                <max>80</max>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setData("x-axis", "damping")</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/x-axis/damping</property>
+            </text>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Movement limit</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <x>10</x>
+                <y>50</y>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/x-axis/movement-limit</property>
+                <min>0</min>
+                <max>0.15</max>
+                <fraction>0.1</fraction>
+                <step>0.001</step>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setData("x-axis", "movement-limit")</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <format>%-0.3f</format>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/x-axis/movement-limit</property>
+            </text>
+        </group>
+    </group>
+
+    <group>
+        <layout>vbox</layout>
+        <padding>6</padding>
+
+        <group>
+            <layout>hbox</layout>
+            <hrule><stretch>true</stretch></hrule>
+            <text>
+                <label>Y axis</label>
+            </text>
+            <hrule><stretch>true</stretch></hrule>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Constant G-load</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <x>10</x>
+                <y>50</y>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/y-axis/constant-g</property>
+                <min>0</min>
+                <max>2</max>
+                <fraction>0.1</fraction>
+                <step>0.01</step>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setData("y-axis", "constant-g")</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/y-axis/constant-g</property>
+            </text>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Impulse G-load</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <x>10</x>
+                <y>50</y>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/y-axis/impulse-g</property>
+                <fraction>0.1</fraction>
+                <step>0.01</step>
+                <min>0</min>
+                <max>2</max>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setData("y-axis", "impulse-g")</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/y-axis/impulse-g</property>
+            </text>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Head pitch</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <x>10</x>
+                <y>50</y>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/y-axis/head-pitch</property>
+                <min>0</min>
+                <max>300</max>
+                <fraction>0.1</fraction>
+                <step>1</step>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setData("y-axis", "head-pitch")</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/y-axis/head-pitch</property>
+            </text>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Damping</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <x>10</x>
+                <y>50</y>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/y-axis/damping</property>
+                <fraction>0.1</fraction>
+                <step>1</step>
+                <min>0</min>
+                <max>80</max>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setData("y-axis", "damping")</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/y-axis/damping</property>
+            </text>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Movement limit</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <x>10</x>
+                <y>50</y>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/y-axis/movement-limit</property>
+                <min>0</min>
+                <max>0.15</max>
+                <fraction>0.1</fraction>
+                <step>0.001</step>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setData("y-axis", "movement-limit")</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <format>%-0.3f</format>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/y-axis/movement-limit</property>
+            </text>
+        </group>
+    </group>
+
+    <group>
+        <layout>vbox</layout>
+        <padding>6</padding>
+
+        <group>
+            <layout>hbox</layout>
+            <hrule><stretch>true</stretch></hrule>
+            <text>
+                <label>Z axis</label>
+            </text>
+            <hrule><stretch>true</stretch></hrule>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Constant G-load</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <x>10</x>
+                <y>50</y>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/z-axis/constant-g</property>
+                <min>0</min>
+                <max>2</max>
+                <fraction>0.1</fraction>
+                <step>0.01</step>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setData("z-axis", "constant-g")</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/z-axis/constant-g</property>
+            </text>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Impulse G-load</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <x>10</x>
+                <y>50</y>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/z-axis/impulse-g</property>
+                <fraction>0.1</fraction>
+                <step>0.01</step>
+                <min>0</min>
+                <max>2</max>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setData("z-axis", "impulse-g")</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/z-axis/impulse-g</property>
+            </text>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Damping</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <x>10</x>
+                <y>50</y>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/z-axis/damping</property>
+                <fraction>0.1</fraction>
+                <step>1</step>
+                <min>0</min>
+                <max>80</max>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setData("z-axis", "damping")</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/z-axis/damping</property>
+            </text>
+        </group>
+
+        <group>
+            <layout>hbox</layout>
+            <text>
+                <label>Movement limit</label>
+            </text>
+            <empty><stretch>1</stretch></empty>
+            <slider>
+                <x>10</x>
+                <y>50</y>
+                <pref-width>200</pref-width>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/z-axis/movement-limit</property>
+                <min>0</min>
+                <max>0.15</max>
+                <fraction>0.1</fraction>
+                <step>0.001</step>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>dialog-update</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script>setData("z-axis", "movement-limit")</script>
+                </binding>
+            </slider>
+            <text>
+                <label>999.9</label> <!-- placeholder for width -->
+                <format>%-0.3f</format>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/DHM-settings/z-axis/movement-limit</property>
+            </text>
+        </group>
+    </group>
+
+    <hrule/>
+
+    <group>
+        <layout>hbox</layout>
+        <padding>6</padding>
+        <empty><stretch>1</stretch></empty>
+        <button>
+            <legend>Defaults</legend>
+            <pref-width>90</pref-width>
+            <pref-height>30</pref-height>
+            <binding>
+                <command>nasal</command>
+                <script>setDefaultValues()</script>
+            </binding>
+            <binding>
+                <command>dialog-update</command>
+            </binding>
+        </button>
+
+        <button>
+            <legend>Back</legend>
+            <pref-width>90</pref-width>
+            <pref-height>30</pref-height>
+            <binding>
+                <command>dialog-show</command>
+                <dialog-name>current-camera-config</dialog-name>
+            </binding>
+            <binding>
+                <command>dialog-close</command>
+                <dialog-name>DHM-settings</dialog-name>
+            </binding>
+        </button>
+
+        <button>
+            <legend>Close</legend>
+            <pref-width>90</pref-width>
+            <pref-height>30</pref-height>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
+        <empty><stretch>1</stretch></empty>
+    </group>
+
+    <nasal>
+        <open> <![CDATA[
+            var listeners = [
+                setlistener(fgcamera.g_myNodePath ~ "/current-camera/camera-id", func update(), 0, 0),
+            ];
+
+            # Update dialog props from current camera object
+            var update = func {
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/head-mass", fgcamera.cameras.getCurrent().DHM["head-mass"]);
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/g-load-release", fgcamera.cameras.getCurrent().DHM["g-load-release"]);
+
+                initProp("y-axis", "constant-g");
+                initProp("y-axis", "impulse-g");
+                initProp("y-axis", "head-pitch");
+                initProp("y-axis", "damping");
+                initProp("y-axis", "movement-limit");
+
+                initProp("x-axis", "constant-g");
+                initProp("x-axis", "impulse-g");
+                initProp("x-axis", "head-bank");
+                initProp("x-axis", "damping");
+                initProp("x-axis", "movement-limit");
+
+                initProp("z-axis", "impulse-g");
+                initProp("z-axis", "constant-g");
+                initProp("z-axis", "damping");
+                initProp("z-axis", "movement-limit");
+
+                fgcommand("dialog-update", props.Node.new({ "dialog-name": "DHM-settings" }));
+            };
+
+            #
+            # Assign the value from the camera object to the dialog property
+            #
+            # @param  string  axis  Property axis name
+            # @param  string  name  Property name
+            # @return void
+            #
+            var initProp = func(axis, name) {
+                setprop(
+                    fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/" ~ axis ~ "/" ~ name,
+                    fgcamera.cameras.getCurrent().DHM[axis][name]
+                );
+            };
+
+            #
+            # Assign the value from the dialog property to the camera object
+            #
+            # @param  string  axis  Property axis name
+            # @param  string  name  Property name
+            # @param  bool  withDhmUpdate
+            # @return void
+            #
+            var setData = func(axis, name, withDhmUpdate = 1) {
+                var value = getprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/" ~ axis ~ "/" ~ name);
+                fgcamera.cameras.getCurrent().DHM[axis][name] = value;
+
+                if (withDhmUpdate) {
+                    fgcamera.DHMHandler.updateValues();
+                }
+            };
+
+            var setFilter = func {
+                var value = getprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/g-load-release");
+                fgcamera.cameras.getCurrent().DHM["g-load-release"] = value;
+                fgcamera.RNDHandler.hpCoeff = value;
+
+                gui.popupTip(sprintf("RND hpCoeff = %.2f", value), 0.5);
+            };
+
+            var setDefaultValues = func {
+                var defaultsNode = props.Node.new();
+                var path = fgcamera.g_Addon.basePath ~ "/default-cameras.xml";
+                props.copy(io.read_properties(path), defaultsNode);
+
+                var dhm = defaultsNode.getChild("camera").getChild("DHM");
+
+                # Set defaults values to properties
+
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/head-mass", dhm.getNode("head-mass").getValue());
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/g-load-release", dhm.getNode("g-load-release").getValue());
+
+                var xAxis = dhm.getChild("x-axis");
+
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/x-axis/constant-g",     xAxis.getNode("constant-g").getValue());
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/x-axis/impulse-g",      xAxis.getNode("impulse-g").getValue());
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/x-axis/head-bank",      xAxis.getNode("head-bank").getValue());
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/x-axis/damping",        xAxis.getNode("damping").getValue());
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/x-axis/movement-limit", xAxis.getNode("movement-limit").getValue());
+
+                var yAxis = dhm.getChild("y-axis");
+
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/y-axis/constant-g",     yAxis.getNode("constant-g").getValue());
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/y-axis/impulse-g",      yAxis.getNode("impulse-g").getValue());
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/y-axis/head-pitch",     yAxis.getNode("head-pitch").getValue());
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/y-axis/damping",        yAxis.getNode("damping").getValue());
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/y-axis/movement-limit", yAxis.getNode("movement-limit").getValue());
+
+                var zAxis = dhm.getChild("z-axis");
+
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/z-axis/constant-g",     zAxis.getNode("constant-g").getValue());
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/z-axis/impulse-g",      zAxis.getNode("impulse-g").getValue());
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/z-axis/damping",        zAxis.getNode("damping").getValue());
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/z-axis/movement-limit", zAxis.getNode("movement-limit").getValue());
+
+                # Set values from props to camera object
+                fgcamera.cameras.getCurrent().DHM["head-mass"] = getprop(fgcamera.g_myNodePath ~ "/dialogs/DHM-settings/head-mass") or 10;
+
+                setFilter();
+
+                setData("x-axis", "constant-g", 0);
+                setData("x-axis", "impulse-g", 0);
+                setData("x-axis", "head-bank", 0);
+                setData("x-axis", "damping", 0);
+                setData("x-axis", "movement-limit", 0);
+
+                setData("y-axis", "constant-g", 0);
+                setData("y-axis", "impulse-g", 0);
+                setData("y-axis", "head-pitch", 0);
+                setData("y-axis", "damping", 0);
+                setData("y-axis", "movement-limit", 0);
+
+                setData("z-axis", "constant-g", 0);
+                setData("z-axis", "impulse-g", 0);
+                setData("z-axis", "damping", 0);
+                setData("z-axis", "movement-limit", 0);
+
+                fgcamera.DHMHandler.updateValues();
+            };
+
+            update();
+        ]]> </open>
+        <close> <![CDATA[
+            foreach (var l; listeners) {
+                removelistener(l);
+            }
+        ]]> </close>
+    </nasal>
+</PropertyList>

@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+    <name>create-new-camera</name>
+    <layout>vbox</layout>
+    <width>330</width>
+
+    <group>
+        <layout>hbox</layout>
+
+        <empty><stretch>1</stretch></empty>
+
+        <text>
+            <label>Create New Camera</label>
+        </text>
+
+        <empty><stretch>1</stretch></empty>
+
+        <button>
+            <legend>X</legend>
+            <key>Esc</key>
+            <pref-width>20</pref-width>
+            <pref-height>20</pref-height>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
+    </group>
+
+    <hrule/>
+
+    <group>
+        <layout>hbox</layout>
+        <padding>6</padding>
+
+        <text>
+            <label>Camera type:</label>
+            <valign>fill</valign>
+            <halign>right</halign>
+            <stretch>1</stretch>
+        </text>
+
+        <combo>
+            <name>camera-types</name>
+            <halign>right</halign>
+            <pref-width>200</pref-width>
+            <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/create-camera/camera-type</property>
+            <binding>
+                <command>dialog-apply</command>
+                <object-name>camera-types</object-name>
+            </binding>
+            <binding>
+                <command>nasal</command>
+                <script>selectCameraType()</script>
+            </binding>
+            <value>cockpit</value>
+            <value>aircraft (look at)</value>
+            <value>aircraft (look from)</value>
+            <value>world (look at)</value>
+            <value>world (look from)</value>
+        </combo>
+    </group>
+
+    <group>
+        <layout>hbox</layout>
+        <padding>6</padding>
+
+        <text>
+            <label>Camera name:</label>
+            <valign>fill</valign>
+            <halign>right</halign>
+            <stretch>1</stretch>
+        </text>
+
+        <input>
+            <name>camera-name</name>
+            <halign>right</halign>
+            <pref-width>200</pref-width>
+            <live>true</live>
+            <property>/addons/by-id/a.marius.FGCamera/addon-devel/dialogs/create-camera/camera-name</property>
+            <binding>
+                <command>dialog-apply</command>
+                <object-name>camera-name</object-name>
+            </binding>
+        </input>
+    </group>
+
+    <hrule/>
+
+    <group>
+        <layout>hbox</layout>
+        <padding>6</padding>
+
+        <empty><stretch>1</stretch></empty>
+        <button>
+            <legend>Create</legend>
+            <pref-width>90</pref-width>
+            <pref-height>30</pref-height>
+            <binding>
+                <command>nasal</command>
+                <script>createCamera()</script>
+            </binding>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
+
+        <button>
+            <legend>Cancel</legend>
+            <pref-width>90</pref-width>
+            <pref-height>30</pref-height>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
+        <empty><stretch>1</stretch></empty>
+    </group>
+
+    <nasal>
+        <open> <![CDATA[
+            if (getprop(fgcamera.g_myNodePath ~ "/dialogs/create-camera/camera-type") == nil) {
+                setprop(fgcamera.g_myNodePath ~ "/dialogs/create-camera/camera-type", "cockpit");
+            }
+
+            var cameraNode = props.Node.new();
+            var path       = fgcamera.g_Addon.basePath ~ "/default-cameras.xml";
+            var type       = nil;
+            props.copy(io.read_properties(path), cameraNode);
+
+            #==================================================
+            #   Functions
+            #==================================================
+            var setTower = func (twr) {
+                var list = [
+                    "latitude-deg",
+                    "longitude-deg",
+                    "altitude-ft",
+                    "heading-deg",
+                    "pitch-deg",
+                    "roll-deg",
+                ];
+
+                foreach (var a; list) {
+                    twr[a] = getprop("/sim/tower/" ~ a);
+                }
+
+                return twr;
+            }
+
+            #==================================================
+            #   Select camera type
+            #==================================================
+            var selectCameraType = func {
+                var selected = getprop(fgcamera.g_myNodePath ~ "/dialogs/create-camera/camera-type") or "cockpit";
+                var types    = [
+                    { label: "cockpit",              value: "FGCamera1" },
+                    { label: "aircraft (look at)",   value: "FGCamera2" },
+                    { label: "aircraft (look from)", value: "FGCamera3" },
+                    { label: "world (look at)",      value: "FGCamera4" },
+                    { label: "world (look from)",    value: "FGCamera5" },
+                ];
+
+                foreach (var item; types) {
+                    if (selected == item.label) {
+                        (type = item.value) and break;
+                    }
+                }
+            }
+
+            #==================================================
+            #   Create new camera
+            #==================================================
+            var createCamera = func {
+                var currentCamera  = fgcamera.cameras.getCurrent();
+
+                var camera   = {};
+                var cameraName = getprop(fgcamera.g_myNodePath ~ "/dialogs/create-camera/camera-name") or "new camera";
+
+                camera         = cameraNode.getChild("camera").getValues();
+                camera.name    = cameraName;
+                camera.type    = type;
+                camera.offsets = currentCamera.offsets[0:];
+                if (type == "FGCamera5") {
+                    camera.tower = setTower(camera.tower);
+                }
+
+                fgcamera.cameras.append(camera);
+
+                fgcommand("fgcamera-select", props.Node.new({ "camera-id": fgcamera.cameras.size() - 1 }));
+            }
+
+            #==================================================
+            selectCameraType();
+        ]]> </open>
+    </nasal>
+</PropertyList>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FG Camera Smooth Control</title>
+<style>
+body {
+  font-family: sans-serif;
+  text-align: center;
+  margin-top: 50px;
+}
+
+button {
+  font-size: 18px;
+  padding: 12px;
+  margin: 5px;
+}
+</style>
+</head>
+<body>
+
+<h2>FlightGear Smooth Camera Control</h2>
+
+<button onmousedown="start('left')" onmouseup="stop()">⬅ Hold Left</button>
+<button onmousedown="start('right')" onmouseup="stop()">➡ Hold Right</button><br>
+
+<button onmousedown="start('up')" onmouseup="stop()">⬆ Hold Up</button>
+<button onmousedown="start('down')" onmouseup="stop()">⬇ Hold Down</button><br>
+
+<button onclick="resetCam()">Reset</button>
+
+<script>
+const ws = new WebSocket("ws://localhost:9090");
+
+let interval = null;
+
+// current state
+let state = {
+  heading: 0,
+  pitch: 0
+};
+
+// smoothing speed (degrees per step)
+const STEP = 0.5;
+
+// send updates continuously (smooth motion)
+function send() {
+  ws.send(JSON.stringify({
+    heading: state.heading,
+    pitch: state.pitch
+  }));
+}
+
+// start continuous movement
+function start(dir) {
+  stop();
+
+  interval = setInterval(() => {
+    if (dir === "left")  state.heading -= STEP;
+    if (dir === "right") state.heading += STEP;
+    if (dir === "up")    state.pitch -= STEP;
+    if (dir === "down")  state.pitch += STEP;
+
+    send();
+  }, 30); // ~33 FPS control updates
+}
+
+// stop movement
+function stop() {
+  if (interval) clearInterval(interval);
+  interval = null;
+}
+
+// reset camera
+function resetCam() {
+  state.heading = 0;
+  state.pitch = 0;
+  send();
+}
+
+// connection debug
+ws.onopen = () => console.log("connected");
+ws.onerror = (e) => console.error(e);
+</script>
+
+</body>
+</html>

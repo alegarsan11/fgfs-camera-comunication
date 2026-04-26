@@ -1,0 +1,18 @@
+el id de la ventana se puede coger con xwininfo
+
+gst-launch-1.0 ximagesrc xid=id_de_la_ventana use-damage=0 ! \
+          videoconvert ! \
+          videoscale ! \
+          video/x-raw,format=I420,width=1280,height=720 ! \
+          x264enc tune=zerolatency speed-preset=ultrafast bitrate=3000 ! \
+          video/x-h264,profile=baseline ! \
+          flvmux ! \
+          rtmpsink location=rtmp://localhost:1935/flightgear\
+
+
+mediamtx
+
+
+despues lanzar bridge y entrar index.html
+
+http://localhost:8889/flightgear/  You will see the data

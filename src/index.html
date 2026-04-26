@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>FlightGear Fly Tiger HUD</title>
+
+<style>
+body {
+    margin: 0;
+    background: #000;
+    overflow: hidden;
+    font-family: 'Courier New', Courier, monospace; /* Toque retro cockpit */
+}
+
+/* El Video ocupa toda la pantalla con latencia cero */
+#videoContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* Esto es clave para recortar */
+    background: #000;
+}
+
+#videoStream {
+    width: 100%;
+    height: 100%;
+    border: none;
+    pointer-events: none; /* Evita que al clicar salga el play/pausa */
+    /* Si el reproductor de MediaMTX tiene bordes o barras, 
+       puedes ampliarlo un poco para que se salgan de la pantalla: */
+    transform: scale(1.05); 
+}
+
+/* Capa de interferencia (Opcional, estilo Fly Tiger) */
+#overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Deja pasar los clics */
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    background-size: 100% 3px, 3px 100%;
+}
+
+/* ===== HUD ROOT ===== */
+#hud {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.dpad {
+    display: grid;
+    grid-template-columns: 70px 70px 70px;
+    grid-template-rows: 70px 70px 70px;
+    gap: 10px;
+}
+
+.btn {
+    background: rgba(0, 255, 0, 0.1); /* Verde militar */
+    border: 2px solid rgba(0, 255, 0, 0.5);
+    color: #0f0;
+    font-size: 24px;
+    border-radius: 50%; /* Botones redondos tipo mando */
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: 0.1s;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+}
+
+.btn:active {
+    transform: scale(0.9);
+    background: rgba(0, 255, 0, 0.4);
+}
+
+.up    { grid-column: 2; grid-row: 1; }
+.left  { grid-column: 1; grid-row: 2; }
+.right { grid-column: 3; grid-row: 2; }
+.down  { grid-column: 2; grid-row: 3; }
+
+#reset {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+#reset button {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    border-radius: 15px;
+    background: rgba(255, 50, 50, 0.2);
+    border: 2px solid rgba(255, 0, 0, 0.6);
+    color: #ff4444;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+}
+</style>
+</head>
+
+<body>
+
+<div id="videoContainer">
+    <iframe id="videoStream" src="http://localhost:8889/flightgear" allow="autoplay; fullscreen"></iframe>
+</div>
+
+<div id="overlay"></div>
+
+<div id="reset">
+    <button onclick="resetCam()">⟲</button>
+</div>
+
+<div id="hud">
+    <div class="dpad">
+        <button class="btn up"    onmousedown="setTarget('up')">▲</button>
+        <button class="btn left"  onmousedown="setTarget('left')">◀</button>
+        <button class="btn right" onmousedown="setTarget('right')">▶</button>
+        <button class="btn down"  onmousedown="setTarget('down')">▼</button>
+    </div>
+</div>
+
+<script>
+// Cambia a la IP de tu Arch si lo usas desde otro dispositivo
+const ws = new WebSocket("ws://localhost:9090");
+
+let target = { heading: 0, pitch: 0 };
+const STEP = 5;
+
+function send() {
+    if (ws.readyState !== 1) return;
+    ws.send(JSON.stringify({
+        type: "camera",
+        heading: target.heading,
+        pitch: target.pitch
+    }));
+}
+
+function setTarget(dir) {
+    if (dir === "left")  target.heading -= STEP;
+    if (dir === "right") target.heading += STEP;
+    if (dir === "up")    target.pitch -= STEP;
+    if (dir === "down")  target.pitch += STEP;
+    send();
+}
+
+function resetCam() {
+    target.heading = 0;
+    target.pitch = 0;
+    send();
+}
+
+ws.onopen = () => console.log("Sistema de Control Conectado");
+ws.onerror = (e) => console.error("Error WS: Asegúrate de que el servidor de control esté corriendo");
+</script>
+
+</body>
+</html>

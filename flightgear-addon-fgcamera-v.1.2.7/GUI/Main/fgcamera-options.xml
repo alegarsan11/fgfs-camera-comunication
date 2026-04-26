@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+    <name>fgcamera-options</name>
+    <layout>vbox</layout>
+    <group>
+        <layout>hbox</layout>
+
+        <empty><stretch>1</stretch></empty>
+
+        <text>
+            <label>FGCamera Options</label>
+        </text>
+
+        <empty><stretch>1</stretch></empty>
+
+        <button>
+            <legend>X</legend>
+            <key>Esc</key>
+            <pref-width>20</pref-width>
+            <pref-height>20</pref-height>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
+    </group>
+
+    <hrule/>
+
+    <group>
+        <layout>vbox</layout>
+
+        <group>
+            <layout>vbox</layout>
+            <padding>6</padding>
+
+            <group>
+                <layout>hbox</layout>
+                <text>
+                    <label>Mouse</label>
+                    <halign>left</halign>
+                </text>
+
+                <hrule><stretch>true</stretch></hrule>
+            </group>
+
+            <checkbox>
+                <halign>left</halign>
+                <label>Press and hold right mouse to look around in FGCameras</label>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/mouse/spring-loaded</property>
+                <live>1</live>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+            </checkbox>
+
+            <checkbox>
+                <halign>left</halign>
+                <label>Force "Press and hold right mouse to look around" in FG views</label>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/mouse/force-look-around-mode-in-fg</property>
+                <live>1</live>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+            </checkbox>
+        </group>
+
+        <group>
+            <layout>vbox</layout>
+            <padding>6</padding>
+
+            <group>
+                <layout>hbox</layout>
+                <text>
+                    <label>Mini-dialog</label>
+                    <halign>left</halign>
+                </text>
+
+                <hrule><stretch>true</stretch></hrule>
+            </group>
+
+            <checkbox>
+                <halign>left</halign>
+                <label>Enable mini-dialog</label>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/mini-dialog-enable</property>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script><![CDATA[
+                        fgcamera.camGui.setMiniDialogListener();
+                    ]]></script>
+                </binding>
+            </checkbox>
+
+            <group>
+                <layout>hbox</layout>
+                <text>
+                    <label>Mini-dialog type</label>
+                    <halign>left</halign>
+                    <enable>
+                        <property>/addons/by-id/a.marius.FGCamera/addon-devel/mini-dialog-enable</property>
+                    </enable>
+                </text>
+                <combo>
+                    <name>mini-dialog-type</name>
+                    <halign>fill</halign>
+                    <stretch>1</stretch>
+                    <property>/addons/by-id/a.marius.FGCamera/addon-devel/mini-dialog-type</property>
+                    <enable>
+                        <property>/addons/by-id/a.marius.FGCamera/addon-devel/mini-dialog-enable</property>
+                    </enable>
+                    <binding>
+                        <command>dialog-apply</command>
+                        <object-name>mini-dialog-type</object-name>
+                    </binding>
+                    <binding>
+                        <command>nasal</command>
+                        <script><![CDATA[
+                            fgcamera.camGui.setMiniDialogListener();
+                        ]]></script>
+                    </binding>
+                    <value>simple</value>
+                    <value>slots</value>
+                </combo>
+            </group>
+
+            <checkbox>
+                <halign>left</halign>
+                <label>Auto hide mini-dialog</label>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/mini-dialog-autohide</property>
+                <enable>
+                    <property>/addons/by-id/a.marius.FGCamera/addon-devel/mini-dialog-enable</property>
+                </enable>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+                <binding>
+                    <command>nasal</command>
+                    <script><![CDATA[
+                        fgcamera.camGui.setMiniDialogListener();
+                    ]]></script>
+                </binding>
+            </checkbox>
+        </group>
+
+        <group>
+            <layout>vbox</layout>
+            <padding>6</padding>
+
+            <group>
+                <layout>hbox</layout>
+                <text>
+                    <label>Keys</label>
+                    <halign>left</halign>
+                </text>
+
+                <hrule><stretch>true</stretch></hrule>
+            </group>
+
+            <checkbox>
+                <halign>left</halign>
+                <label>Use Ctrl with numeric keys</label>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/use-ctrl-with-numkeys</property>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+            </checkbox>
+        </group>
+
+        <group>
+            <layout>vbox</layout>
+            <padding>6</padding>
+
+            <group>
+                <layout>hbox</layout>
+                <text>
+                    <label>Extra handlers</label>
+                    <halign>left</halign>
+                </text>
+
+                <hrule><stretch>true</stretch></hrule>
+            </group>
+
+            <checkbox>
+                <halign>left</halign>
+                <label>Linux Track</label>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/handlers/linux-track</property>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+            </checkbox>
+
+            <checkbox>
+                <halign>left</halign>
+                <label>TrackIR</label>
+                <property>/addons/by-id/a.marius.FGCamera/addon-devel/handlers/track-ir</property>
+                <binding>
+                    <command>dialog-apply</command>
+                </binding>
+            </checkbox>
+        </group>
+    </group>
+
+    <hrule/>
+
+    <group>
+        <layout>hbox</layout>
+        <padding>6</padding>
+        <empty><stretch>1</stretch></empty>
+
+        <button>
+            <legend>Save</legend>
+            <pref-width>90</pref-width>
+            <pref-height>30</pref-height>
+            <binding>
+                <command>dialog-apply</command>
+            </binding>
+            <binding>
+                <command>nasal</command>
+                <script><![CDATA[
+                    fgcamera.fileHandler.saveCameras();
+                ]]></script>
+            </binding>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
+
+        <button>
+            <legend>Close</legend>
+            <key>Esc</key>
+            <pref-width>90</pref-width>
+            <pref-height>30</pref-height>
+            <binding>
+                <command>dialog-close</command>
+            </binding>
+        </button>
+        <empty><stretch>1</stretch></empty>
+    </group>
+</PropertyList>
