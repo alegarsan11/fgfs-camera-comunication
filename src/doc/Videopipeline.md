@@ -89,18 +89,6 @@ videoconvert ! x264enc tune=zerolatency speed-preset=ultrafast ! \
 rtspclientsink location=rtsp://localhost:8554/fgcam
 ```
 
----
-
-## 7. Web (HLS option)
-
-Create browser stream:
-
-```bash
-ffmpeg -f mjpeg -i "http://localhost:8080/screenshot?stream=1" \
--c:v libx264 -f hls -hls_time 1 -hls_list_size 3 \
-/var/www/html/fgcam.m3u8
-```
-
 Open:
 
 ```
@@ -109,7 +97,7 @@ http://localhost/fgcam.m3u8
 
 ---
 
-## 8. WebRTC (low latency option)
+## 7. WebRTC (low latency option)
 
 MediaMTX automatically provides WebRTC:
 
@@ -119,7 +107,7 @@ http://localhost:8889
 
 ---
 
-## 9. What is a Signaling Server?
+## 8. What is a Signaling Server?
 
 WebRTC requires signaling to exchange connection info:
 
@@ -136,7 +124,7 @@ MediaMTX includes signaling internally.
 
 ---
 
-## 10. Key Concepts
+## 9. Key Concepts
 
 ### Streaming vs Encoding vs Signaling
 
@@ -146,7 +134,7 @@ MediaMTX includes signaling internally.
 
 ---
 
-## 11. Recommended Setup
+## 10. Recommended Setup
 
 ### Simple (stable)
 
@@ -162,7 +150,7 @@ FlightGear → GStreamer → MediaMTX → WebRTC (browser)
 
 ---
 
-## 12. Summary
+## 11. Summary
 
 You built a real-time video pipeline:
 
