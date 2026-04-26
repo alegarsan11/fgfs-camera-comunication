@@ -16,9 +16,7 @@ function setProp(path, value) {
   fg.write(`set ${path} ${value}\r\n`);
 }
 
-/* =========================
-   RECEIVE TARGET
-========================= */
+// Revice la comunicacion del HTML con orden de movimiento
 wss.on("connection", (ws) => {
 
   ws.on("message", (msg) => {
@@ -37,12 +35,9 @@ wss.on("connection", (ws) => {
 
 });
 
-/* =========================
-   SMOOTH MOVEMENT ENGINE
-========================= */
+// Movimiento lento del motor
 setInterval(() => {
 
-  // gradual movement (THIS is the "poco a poco")
   state.heading += (target.heading - state.heading) * 0.08;
   state.pitch   += (target.pitch - state.pitch) * 0.08;
 
