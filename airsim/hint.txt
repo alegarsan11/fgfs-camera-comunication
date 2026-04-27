@@ -1,0 +1,1 @@
+python3.11 is required not supported in newer versions
